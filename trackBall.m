@@ -3,7 +3,7 @@
 %in order to plot the position graph
 
 %Load Video and get needed info
-video=VideoReader('rollingLandscape.mp4');
+video=VideoReader('assets/rollingLandscape.mp4');
 height=get(video,'Height');
 width=get(video,'Width');
 frameCount=video.NumberOfFrames;

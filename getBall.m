@@ -1,7 +1,9 @@
 %Color detection with HSV parameters for a single image
 
 %Reading image as RGB
-IMG=imread('topLeft.jpg');
+IMG=imread('assets/topLeft.jpg');
+
+[height,width,rgb]=size(IMG);
 
 %Converting RGB to HSV
 IMGHsv=rgb2hsv(IMG);
@@ -44,3 +46,13 @@ IMGBin=im2bw(maskRgb,0.3);
 
 posX=mean(centerX);
 posY=mean(centerY);
+
+%Get the angle
+eyeX=width/2;
+eyeY=height;
+
+deltaX=posX-eyeX;
+deltaY=abs(posY-eyeY);
+
+angle=atan(deltaY/deltaX); %In radians
+angle=(angle/pi)*180; %In degrees
