@@ -1,0 +1,57 @@
+%Color detection with HSV parameters
+
+%Reading image as RGB
+IMG=imread('tennisBall.jpg');
+
+%Converting RGB to HSV
+IMGHsv=rgb2hsv(IMG);
+[x,y,hsv]=size(IMG);
+
+%Extracting Hue, Saturation and 
+IMGHue=IMGHsv(:,:,1);
+IMGSat=IMGHsv(:,:,2);
+IMGVal=IMGHsv(:,:,3);
+
+hueLow=0.15;
+hueHigh=0.2;
+
+satLow=0.7;
+satHigh=0.99;
+
+valueLow=0.4;
+valueHigh=0.95;
+
+hueMask=(IMGHue >= hueLow) & (IMGHue<=hueHigh);
+satMask=(IMGSat >= satLow)&(IMGSat <= satHigh);
+valueMask=(IMGVal >= valueLow) & (IMGVal <= valueHigh);
+
+testHsv=hueMask & satMask & valueMask;
+
+
+% for i=1:x
+%     for j=1:y
+%         
+%         if (abs(IMGHsv(i,j,1)-hue)<tolerance)
+%             resultHsv(i,j,1)=0;
+%             resultHsv(i,j,2)=0;
+%             resultHsv(i,j,3)=0;
+%         else
+%             resultHsv(i,j,1)=0;
+%             resultHsv(i,j,2)=0;
+%             resultHsv(i,j,3)=1;
+%         end
+%     end
+% end
+% 
+% resultRGB=hsv2rgb(resultHsv);
+% 
+% resultBW=im2bw(resultRGB);
+% resultBW=imcomplement(resultBW);
+% resultBW=imfill(resultBW,'holes');
+% se=strel('disk',32);
+% 
+% 
+% resultBW=imopen(resultBW,se);
+% 
+% [centY,centX]=find(resultBW);
+% center=[mean(centX) mean(centY)]
