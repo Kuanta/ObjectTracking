@@ -29,11 +29,11 @@ valHigh=0.95;
 
 hold on
 
-for currentFrame=1:frameCount
+for curFrame=1:frameCount
     
     ecc=1;
     
-     IMG=imread(filepath);
+     IMG=read(video,curFrame);
      [height,width,rgb]=size(IMG);
      Blurred=imgaussfilt(IMG,5);
     
@@ -56,7 +56,7 @@ for currentFrame=1:frameCount
 
     
     maskedRgb=isolateColorHSV(IMG,hueLow,hueHigh,satLow,satHigh,valLow,valHigh);
-    BW=im2bw(maskedRgb,.5);
+    BW=im2bw(Blurred,.5);
     
     
     edged=edge(BW,'Prewitt');
