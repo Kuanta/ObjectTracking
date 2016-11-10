@@ -66,7 +66,7 @@ for i=1:loopCount
 
     
     maskedRgb=isolateColorHSV(IMG,hueLow,hueHigh,satLow,satHigh,valLow,valHigh);
-    BW=im2bw(Blurred,.5);%Blur the image for easy processing
+    BW=im2bw(Blurred,.7);%Blur the image for easy processing
     
     %Edge Detection
     edged=edge(BW,'Prewitt');
@@ -81,12 +81,20 @@ for i=1:loopCount
     %Getting info with regionprops
     stats=regionprops(BWfinal,'Eccentricity','Centroid','Area');
     
-    %If there is only one region, get its info without checking anything
-    if length(stats) == 1   
-        centroid = stats.Centroid;
-        posX=centroid(1);
-        posY=height-centroid(2);
-        area=stats.Area;
+    %If there aren't any regions, remember the last data, don't change
+    %anything
+    length(stats)
+    if length(stats)==0
+        
+    %If there is only one region, get its info if its nearly round
+    elseif length(stats) == 1
+        if(stats.Eccentricity<ecc)
+            centroid = stats.Centroid;
+            posX=centroid(1);
+            posY=height-centroid(2);
+            area=stats.Area;
+        end
+        
     %More than one region
     else
         for k=1:length(stats) %loop stats
@@ -108,10 +116,10 @@ for i=1:loopCount
     
     %Calculate Angle
     angle=getAngle(posX,posY,width,height);
-    posX
-    posY
-    %angle
-    %area
+    %posX
+    %posY
+    %angle;
+    area
     
     %Collect the data
     data(i)=struct('posX',posX,'posY',posY,'angle',angle,'area',area);
