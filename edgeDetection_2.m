@@ -1,5 +1,6 @@
 clear
 
+
 video=VideoReader('assets/bb.mp4');
 height=get(video,'Height');
 width=get(video,'Width');
@@ -15,6 +16,7 @@ posY=0;
 % greenLow=50;
 % greenHigh=150;
 % 
+
 % blueLow=50;
 % blueHigh=200;
 
