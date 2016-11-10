@@ -1,14 +1,22 @@
+%   This script captures a round object with edge detection using IPCam
+%It assumes that there aren't any other round objects around since it gets
+%the one with the smallest Eccenctricity
+%(For circles Ecc=0 and for lines Ecc=1)
+
 clear
 
-url='http://161.9.11.49:8080/shot.jpg';
+url='http://161.9.30.73:8080/shot.jpg';
 
+%Initialize needed variables
 posX=0;
 posY=0;
 angle=0;
 area=0;
 
 loopCount=200;
-data=zeros(loopCount);
+
+%Initialize an array of struct
+data(1:loopCount)=struct('posX',0,'posY',0,'angle',0,'area',0);
 % redLow=100;
 % redHigh=255;
 % 
@@ -19,6 +27,7 @@ data=zeros(loopCount);
 % blueLow=50;
 % blueHigh=200;
 
+%Thresholds
 hueLow=0.95;
 hueHigh=1;
 
@@ -57,27 +66,28 @@ for i=1:loopCount
 
     
     maskedRgb=isolateColorHSV(IMG,hueLow,hueHigh,satLow,satHigh,valLow,valHigh);
-    BW=im2bw(Blurred,.5);
+    BW=im2bw(Blurred,.5);%Blur the image for easy processing
     
-    
+    %Edge Detection
     edged=edge(BW,'Prewitt');
+    
+    %Morphological  Operations
     se=strel('disk',30);
-    BWclosed=imclose(edged,se); %Bu sayede ayr�k pixellerin birle�tirilmesi ama�lan�yor
+    BWclosed=imclose(edged,se); %Smoothen the image
     BWfilled=imfill(BWclosed,'holes');
+    BWao=bwareaopen(BWfilled,1000); %Clear the smaller pixels
+    BWfinal=imclearborder(BWao);%Remove regions toching the edges
     
-    
-    BWao=bwareaopen(BWfilled,1000); %�zole pixelleri temizle
-    BWfinal=imclearborder(BWao);
-    
-    
+    %Getting info with regionprops
     stats=regionprops(BWfinal,'Eccentricity','Centroid','Area');
     
-    if length(stats) == 1
-        %�f there is only 1 region, don't loop through them all
+    %If there is only one region, get its info without checking anything
+    if length(stats) == 1   
         centroid = stats.Centroid;
         posX=centroid(1);
         posY=height-centroid(2);
         area=stats.Area;
+    %More than one region
     else
         for k=1:length(stats) %loop stats
             if stats(k).Eccentricity < 0.8 & stats(k).Eccentricity <ecc
@@ -98,14 +108,16 @@ for i=1:loopCount
     
     %Calculate Angle
     angle=getAngle(posX,posY,width,height);
-    %posX
-    %posY
+    posX
+    posY
     %angle
+    %area
     
+    %Collect the data
     data(i)=struct('posX',posX,'posY',posY,'angle',angle,'area',area);
     
     %marked=insertMarker(BWao,[posX posY],'o','color','black','size',20);
-    imshow(BW);
+    imshow(BWfinal);
    
 end
     
