@@ -5,7 +5,7 @@
 
 clear
 
-url='http://161.9.30.73:8080/shot.jpg';
+url='http://161.9.12.158:8080/shot.jpg';
 
 %Initialize needed variables
 posX=0;
@@ -75,7 +75,7 @@ for i=1:loopCount
     se=strel('disk',30);
     BWclosed=imclose(edged,se); %Smoothen the image
     BWfilled=imfill(BWclosed,'holes');
-    BWao=bwareaopen(BWfilled,1000); %Clear the smaller pixels
+    BWao=bwareaopen(BWfilled,500); %Clear the smaller pixels
     BWfinal=imclearborder(BWao);%Remove regions toching the edges
     
     %Getting info with regionprops
@@ -83,7 +83,6 @@ for i=1:loopCount
     
     %If there aren't any regions, remember the last data, don't change
     %anything
-    length(stats)
     if length(stats)==0
         
     %If there is only one region, get its info if its nearly round
@@ -118,8 +117,8 @@ for i=1:loopCount
     angle=getAngle(posX,posY,width,height);
     %posX
     %posY
-    %angle;
-    area
+    angle
+    %area
     
     %Collect the data
     data(i)=struct('posX',posX,'posY',posY,'angle',angle,'area',area);

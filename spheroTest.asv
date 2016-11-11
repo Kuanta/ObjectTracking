@@ -1,0 +1,5 @@
+if ~exist('sph','var')
+    
+    sph = sphero();
+    end
+connect(sph);
